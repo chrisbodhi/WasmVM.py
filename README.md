@@ -1,7 +1,7 @@
 # WasmVM.py
 ## A stack-based virtual machine for learning WebAssembly
 
-This is a simple stack-based virtual machine that can execute a small set of instructions. It is intended to be the starting point for learning more deeply how WebAssembly works.
+This is a simple stack-based virtual machine that can execute a small set of instructions. It is intended to be the starting point for learning more deeply how WebAssembly works. Right now, like WebAssembly, it only supports 32- and 64-bit integers and floats for operations.
 
 ### Using
 
@@ -10,7 +10,7 @@ This is a simple stack-based virtual machine that can execute a small set of ins
 1. Open the Python REPL by running `python3` in your terminal.
 1. Import the `StackVM` class and instructions. 
     ```python
-    from virtual_machine import StackVM, Add, Sub, Push
+    from virtual_machine import StackVM, Add, Sub, Push, i32
     ```
 1. Create an instance of the `StackVM` class.
     ```python
@@ -18,7 +18,7 @@ This is a simple stack-based virtual machine that can execute a small set of ins
     ```
 1. Add instructions to your virtual machine.
     ```python
-    vm.instructions = [Push(2), Push(3), Add()]
+    vm.instructions = [Push(i32(2)), Push(i32(3)), Add("i32")]
     ```
 1. Execute the instructions.
     ```python
@@ -27,6 +27,7 @@ This is a simple stack-based virtual machine that can execute a small set of ins
 1. Inspect the stack after your instructions have been executed: 
     ```python
     vm.inspect()
+    # [6]
     ```
 
 #### Hooking in observers
