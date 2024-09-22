@@ -58,3 +58,11 @@ In short, a stack-based virtual machine is a computer that
 uses a stack to store data and execute instructions ("stack" like pancakes). Operations are performed by pushing values onto the stack and then popping them off to be used as arguments to instructions. The program counter (PC) keeps track of where the virtual machine is in the program, and the stack is used to store intermediate values.
 
 Stack-based virtual machines are found in the wild in many places, such as the Java Virtual Machine (JVM), the .NET Common Language Runtime (CLR), and (of course) the WebAssembly virtual machine that's in your browser (unless you're using Lynx).
+
+### Resources
+
+There are many resources available to learn more about WebAssembly and how it works. Here's what I've been using:
+
+- [WebAssembly: The Definitive Guide](https://www.oreilly.com/library/view/webassembly-the-definitive/9781492089834/) by Brian Sletten
+- [WABT](https://github.com/WebAssembly/wabt), the WebAssembly Binary Toolkit
+- [Claude](https://claude.ai) and [GitHub Copilot](https://github.com/features/copilot)
