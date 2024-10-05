@@ -1,3 +1,14 @@
-- store local variables
+THE GOAL HERE IS TO CREATE A SIMPLE WASM-LIKE MACHINE IN PYTHON
+IN ORDER TO LEARN MORE COMPLETELY WHAT WASM DOES AND HOW.
+
+- add in-vm memory of a specified capacity
+  - (memory (export "meme") 1 10) requests a block of memory that's 1 page long, with a maximum of 10 pages
+  - ✅ start with creating a single page of memory, add support for adding up to n pages via stack instruction; check that max size is not exceeded
+- use the new in-vm memory for... come up with something. storing values at arbitrary locations via instruction?
+- what about endianess? how do we want to handle it here?
+- store local variables, eg (local $index i32)
+  - find out if this is only in function scope
 - read from host system memory
 - write to host system memory
+- multiply instruction
+- division instruction
