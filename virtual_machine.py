@@ -38,17 +38,17 @@ num_fns = {
 
 supported_value_types = list(num_fns.keys())
 
+def make_page() -> list[bytes]:
+    ONE_BYTE = b'\x00'
+    KiB = 1_024
+    return [ONE_BYTE] * KiB * 10
+
 class VMState:
     def __init__(self, pages: int, max_pages: int):
         self.stack: List[WasmValue] = []
         self.pc: int = 0
-        # TODO: Memory of 10KiB per page
-        # TODO: make this a byte array with 10KiB of
-        # blank bytes per "page"
-        # TODO: replace the None
-        self.memory = [None] * pages
+        self.memory: list[list[bytes]] = [make_page() for _ in range(pages)]
         self.max_pages = max_pages
-
 
 class Instruction(ABC):
     @abstractmethod
