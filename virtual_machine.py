@@ -57,7 +57,9 @@ class Instruction(ABC):
 
 ### Stack operations -- begin ###
 class Push(Instruction):
-    """Push is an instruction that pushes a value onto the top of the stack."""
+    """
+    Push is an instruction that pushes a value onto the top of the stack.
+    """
     def __init__(self, value: WasmValue):
         self.value = value
 
@@ -65,7 +67,9 @@ class Push(Instruction):
         state.stack.append(self.value)
 
 class Pop(Instruction):
-    """Pop is an instruction that removes the first value from the stack and returns it."""
+    """
+    Pop is an instruction that removes the first value from the stack and returns it.
+    """
     def execute(self, state: VMState) -> WasmValue:
         return state.stack.pop()
 
@@ -75,15 +79,15 @@ class Grow(Instruction):
     reaching the maximum specified when initializing the VM.
     """
     def execute(self, state: VMState) -> None:
-        # TODO: define a `makePage` function
-        page = None
         if len(state.memory) < state.max_pages:
-            state.memory.append(page)
+            state.memory.append(make_page())
 
 ### Stack operations -- end ###
 
 class Add(Instruction):
-    """Add is an instruction that pops the top two values from the stack, adds them together, and pushes the result back onto the stack."""
+    """
+    Add is an instruction that pops the top two values from the stack, adds them together, and pushes the result back onto the stack.
+    """
     def __init__(self, value_type: str):
         if value_type not in supported_value_types:
             raise ValueError(f"Unsupported value type: {value_type}")
@@ -96,7 +100,9 @@ class Add(Instruction):
         Push(self.fn(a + b)).execute(state)
 
 class Sub(Instruction):
-    """Sub is an instruction that pops the top two values from the stack, subtracts the second one popped from the first one popped, and pushes the result back onto the stack."""
+    """
+    Sub is an instruction that pops the top two values from the stack, subtracts the second one popped from the first one popped, and pushes the result back onto the stack.
+    """
     def __init__(self, value_type: str):
         if value_type not in supported_value_types:
             raise ValueError(f"Unsupported value type: {value_type}")
@@ -107,6 +113,36 @@ class Sub(Instruction):
         b = Pop().execute(state)
         a = Pop().execute(state)
         Push(self.fn(a - b)).execute(state)
+
+class Mult(Instruction):
+    """
+    Mult multiplies the top two values on the stack, and pushes the product back onto the stack.
+    """
+    def __init__(self, value_type) -> None:
+        if value_type not in supported_value_types:
+            raise ValueError(f"Unsupported value type: {value_type}")
+        self.value_type = value_type
+        self.fn = num_fns[value_type]
+
+    def execute(self, state: VMState) -> None:
+        a = Pop().execute(state)
+        b = Pop().execute(state)
+        Push(self.fn(a * b)).execute(state)
+
+class Div(Instruction):
+    """
+    Div divides the value at the top of stack by the value immediately following it, and pushes the quotient back onto the stack.
+    """
+    def __init__(self, value_type) -> None:
+        if value_type not in supported_value_types:
+            raise ValueError(f"Unsupported value type: {value_type}")
+        self.value_type = value_type
+        self.fn = num_fns[value_type]
+
+    def execute(self, state: VMState) -> None:
+        dividend = Pop().execute(state)
+        divisor = Pop().execute(state)
+        Push(self.fn(dividend / divisor)).execute(state)
 
 class StackVM:
     def __init__(self, pages: int = 0, max_pages: int = 0):
