@@ -74,6 +74,19 @@ Java Virtual Machine (JVM), the .NET Common Language Runtime (CLR), and (of
 course) the WebAssembly virtual machine that's in your browser (unless you're
 using Lynx).
 
+### Instruction set
+
+- `Add`
+- `Sub`
+- `Mul`
+- `Div`
+- `Eq`
+- `Eqz`
+- `Lt` _coming soon_
+- `Le` _coming soon_
+- `Gt` _coming soon_
+- `Ge` _coming soon_
+
 ### Resources
 
 There are many resources available to learn more about WebAssembly and how it

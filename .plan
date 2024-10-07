@@ -11,5 +11,15 @@ IN ORDER TO LEARN MORE COMPLETELY WHAT WASM DOES AND HOW.
     - find out if this is only in function scope
 - read from host system memory
 - write to host system memory
+- add observers for in-vm memory
+- create a visual representation of the entire machine that can be displayed in a web page
+
+- `Lt` instruction
+- `Le` instruction
+- `Gt` instruction
+- `Ge` instruction
+
 - ✅ multiply instruction
 - ✅ division instruction
+- ✅ eq instruction
+- ✅ eqz instruction
