@@ -13,7 +13,9 @@ how WebAssembly works. Right now, like WebAssembly, it only supports 32- and
 1. Open the Python REPL by running `python3` in your terminal.
 1. Import the `StackVM` class and instructions.
     ```python
-    from virtual_machine import StackVM, Add, Sub, Push, i32
+    from virtual_machine import StackVM
+    from lib import Add, Sub, Push
+    from functions import i32
     ```
 1. Create an instance of the `StackVM` class.
     ```python
@@ -33,7 +35,7 @@ how WebAssembly works. Right now, like WebAssembly, it only supports 32- and
 1. Inspect the stack after your instructions have been executed:
     ```python
     vm.inspect()
-    # [6]
+    # [5]
     ```
 
 #### Hooking in observers
@@ -48,7 +50,9 @@ stack at each step by running (this one is included in the
 `virtual_machine` module):
 
 ```python
-from virtual_machine import StackVM, Add, Sub, Push, VMState
+from virtual_machine import StackVM
+from lib import Add, Sub, Push
+from shared import VMState
 
 def print_state(state: VMState) -> None:
     print(f"Stack: {state.stack} || Program Counter: {state.pc}")

@@ -1,6 +1,7 @@
 THE GOAL HERE IS TO CREATE A SIMPLE WASM-LIKE MACHINE IN PYTHON
 IN ORDER TO LEARN MORE COMPLETELY WHAT WASM DOES AND HOW.
 
+- zomg, unit tests, please. push(6), push(-6), sub() --> 12
 - add in-vm memory of a specified capacity
     - ✅ start with creating a single page of memory, add support for adding up to n pages via stack instruction; check that max size is not exceeded
       - ✅ (memory (export "meme") 1 10) requests a block of memory that's 1 page long, with a maximum of 10 pages
