@@ -1,0 +1,102 @@
+from abc import ABCMeta
+from typing import Literal
+import uuid
+
+from fastapi import FastAPI, status
+from fastapi.exceptions import HTTPException
+from pydantic import BaseModel
+from starlette.status import HTTP_200_OK, HTTP_404_NOT_FOUND
+
+from virtual_machine import StackVM
+from functions import num_fns
+from lib import Add, Div, Eq, Eqz, Instruction, Mul, Pop, Push, Sub
+from shared import WasmValue
+
+vms: dict[str, StackVM] = {}
+
+app = FastAPI()
+
+cmds: dict[str, ABCMeta] = {
+    "add": Add,
+    "div": Div,
+    "eq": Eq,
+    "eqz": Eqz,
+    "mul": Mul,
+    "pop": Pop,
+    "push": Push,
+    "sub": Sub,
+}
+
+class RPC(BaseModel):
+    name: str
+    type: Literal["i32", "i64", "f32", "f64"] | None = None
+    value: WasmValue | None = None
+
+def map_to_instruct(rpcs: list[RPC]) -> list[Instruction]:
+    instructions: list[Instruction] = []
+    for rpc in rpcs:
+        name, type, value = rpc.name, rpc.type, rpc.value
+        cmd = cmds[name]
+        if type and value:
+            type_fn = num_fns[type]
+            instruct = cmd(type_fn(value))
+        else:
+            instruct = cmd(type)
+        instructions.append(instruct)
+    return instructions
+
+@app.get("/")
+def read_index():
+    """
+    Can you see this?
+    """
+    vm = StackVM()
+    return {"Hola": f"Mundo: {vm.inspect()}"}
+
+@app.post("/create")
+def get_or_create_vm(q: str | None = None):
+    """
+    Get an existing stack virtual machine, or create a new one.
+    """
+    print(f"q: {q}")
+    print(vms)
+    if q and q in vms:
+        return vms[q], q
+    else:
+        id = str(uuid.uuid4())
+        vm = StackVM()
+        vms[id] = vm
+        return vm, id
+
+@app.post("/instructions/{vm_id}")
+def add_instructions(vm_id: str, rpcs: list[RPC]):
+    """
+    Add one or more instructions to the specified stack virtual machine.
+    """
+    if not vm_id in vms:
+        raise HTTPException(HTTP_404_NOT_FOUND, f"VM ${vm_id} not found")
+    vm = vms[vm_id]
+    instructions = map_to_instruct(rpcs)
+    vm.instructions.extend(instructions)
+    return vm.inspect()
+
+@app.post("/run/{vm_id}")
+def run(vm_id: str):
+    """
+    Execute the instructions for the specified stack virtual machine.
+    """
+    if not vm_id in vms:
+        raise HTTPException(HTTP_404_NOT_FOUND, f"VM ${vm_id} not found")
+    vm = vms[vm_id]
+    vm.run()
+    return vm.inspect()
+
+@app.get("/inspect/{vm_id}")
+def inspect(vm_id: str):
+    """
+    Inspect the specified stack virtual machine's current stack.
+    """
+    if not vm_id in vms:
+        raise HTTPException(HTTP_404_NOT_FOUND, f"VM ${vm_id} not found")
+    vm = vms[vm_id]
+    return vm.inspect()

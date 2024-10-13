@@ -1,6 +1,7 @@
 from typing import Callable
 
-from lib import Instruction, VMState
+from functions import i32
+from lib import Instruction, Push, VMState
 
 class StackVM:
     def __init__(self, pages: int = 0, max_pages: int = 0):

@@ -1,4 +1,7 @@
 import struct
+from typing import Callable
+
+from shared import WasmValue
 
 def i32(value: int) -> int:
     """
@@ -25,14 +28,9 @@ def f64(value: float) -> float:
     """
     return value
 
-num_fns = {
+num_fns: dict[str, Callable] = {
     "i32": i32,
     "i64": i64,
     "f32": f32,
     "f64": f64,
 }
-
-def make_page() -> list[bytes]:
-    ONE_BYTE = b'\x00'
-    KiB = 1_024
-    return [ONE_BYTE] * KiB * 10

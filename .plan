@@ -13,7 +13,10 @@ IN ORDER TO LEARN MORE COMPLETELY WHAT WASM DOES AND HOW.
 - read from host system memory
 - write to host system memory
 - add observers for in-vm memory
-- create a visual representation of the entire machine that can be displayed in a web page
+- 🏃‍♂️ create a visual representation of the entire machine that can be displayed in a web page
+    - ✅ create an api for interacting with the machine
+    - create a front-end with hardcoded buttons for interacting with the machine, and a display of the current state of the machine
+    - For the observers and the web page -- can the observer be a websocket connections that sends updates?
 
 - `Lt` instruction
 - `Le` instruction
