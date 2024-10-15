@@ -47,6 +47,36 @@ how WebAssembly works. Right now, like WebAssembly, it only supports 32- and
 1. Start the API: `fastapi dev main.py`
 1. Navigate to http://127.0.0.1:8000/docs to use the OpenAPI documentation.
 
+#### Working with the frontend
+
+In the directory `/static`, there resides a simple frontend that can be used to interact with the API. To start the frontend, you need to first install the necessary tools:
+
+```bash
+# install bun for macos
+brew install oven-sh/bun/bun
+bun upgrade
+```
+
+From here, you'll next install the dependencies:
+
+```bash
+cd static
+bun install
+```
+
+Finally, you can start the frontend:
+
+```bash
+bun run dev
+```
+
+To build the frontend for production, you can run:
+
+```bash
+bun run build
+```
+
+
 #### Hooking in observers
 
 Since this is a learning tool, it can be useful to see what
