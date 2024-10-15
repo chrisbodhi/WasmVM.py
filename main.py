@@ -4,6 +4,7 @@ import uuid
 
 from fastapi import FastAPI, status
 from fastapi.exceptions import HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
 from virtual_machine import StackVM
@@ -14,6 +15,18 @@ from shared import WasmValue
 vms: dict[str, StackVM] = {}
 
 app = FastAPI()
+
+origins = [
+    "http://localhost:5173"
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 cmds: dict[str, ABCMeta] = {
     "add": Add,
@@ -60,12 +73,13 @@ def get_or_create_vm(q: str | None = None):
         return vm, id
 
 @app.get("/instructions")
-def get_instructions():
+# TODO: improve return type here
+def get_instructions() -> dict[str, list[str]]:
     """
     Return a list of available instructions to use with the stack virtual machine.
     """
     instructions = cmds.keys()
-    return list(instructions)
+    return { "instructions": list(instructions) }
 
 
 @app.post("/instructions/{vm_id}")
