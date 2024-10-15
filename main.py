@@ -5,7 +5,6 @@ import uuid
 from fastapi import FastAPI, status
 from fastapi.exceptions import HTTPException
 from pydantic import BaseModel
-from starlette.status import HTTP_200_OK, HTTP_404_NOT_FOUND
 
 from virtual_machine import StackVM
 from functions import num_fns
@@ -45,14 +44,6 @@ def map_to_instruct(rpcs: list[RPC]) -> list[Instruction]:
         instructions.append(instruct)
     return instructions
 
-@app.get("/")
-def read_index():
-    """
-    Can you see this?
-    """
-    vm = StackVM()
-    return {"Hola": f"Mundo: {vm.inspect()}"}
-
 @app.post("/create")
 def get_or_create_vm(q: str | None = None):
     """
@@ -68,13 +59,22 @@ def get_or_create_vm(q: str | None = None):
         vms[id] = vm
         return vm, id
 
+@app.get("/instructions")
+def get_instructions():
+    """
+    Return a list of available instructions to use with the stack virtual machine.
+    """
+    instructions = cmds.keys()
+    return list(instructions)
+
+
 @app.post("/instructions/{vm_id}")
 def add_instructions(vm_id: str, rpcs: list[RPC]):
     """
     Add one or more instructions to the specified stack virtual machine.
     """
     if not vm_id in vms:
-        raise HTTPException(HTTP_404_NOT_FOUND, f"VM ${vm_id} not found")
+        raise HTTPException(status.HTTP_404_NOT_FOUND, f"VM ${vm_id} not found")
     vm = vms[vm_id]
     instructions = map_to_instruct(rpcs)
     vm.instructions.extend(instructions)
@@ -86,7 +86,7 @@ def run(vm_id: str):
     Execute the instructions for the specified stack virtual machine.
     """
     if not vm_id in vms:
-        raise HTTPException(HTTP_404_NOT_FOUND, f"VM ${vm_id} not found")
+        raise HTTPException(status.HTTP_404_NOT_FOUND, f"VM ${vm_id} not found")
     vm = vms[vm_id]
     vm.run()
     return vm.inspect()
@@ -97,6 +97,6 @@ def inspect(vm_id: str):
     Inspect the specified stack virtual machine's current stack.
     """
     if not vm_id in vms:
-        raise HTTPException(HTTP_404_NOT_FOUND, f"VM ${vm_id} not found")
+        raise HTTPException(status.HTTP_404_NOT_FOUND, f"VM ${vm_id} not found")
     vm = vms[vm_id]
     return vm.inspect()
