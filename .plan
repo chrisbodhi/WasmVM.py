@@ -1,7 +1,12 @@
 THE GOAL HERE IS TO CREATE A SIMPLE WASM-LIKE MACHINE IN PYTHON
 IN ORDER TO LEARN MORE COMPLETELY WHAT WASM DOES AND HOW.
 
-- zomg, unit tests, please. push(6), push(-6), sub() --> 12
+- 🏃‍♂️ zomg, unit tests, please. push(6), push(-6), sub() --> 12
+- 🏃‍♂️ create a visual representation of the entire machine that can be displayed in a web page
+    - ✅ create an api for interacting with the machine
+    - ✅ create a front-end with hardcoded buttons for interacting with the machine, and a display of the current state of the machine
+    - Add an observer to the machine that sends updates to the front-end
+    - For the observers and the web page -- can the observer be a websocket connections that sends updates?
 - add in-vm memory of a specified capacity
     - ✅ start with creating a single page of memory, add support for adding up to n pages via stack instruction; check that max size is not exceeded
       - ✅ (memory (export "meme") 1 10) requests a block of memory that's 1 page long, with a maximum of 10 pages
@@ -13,12 +18,6 @@ IN ORDER TO LEARN MORE COMPLETELY WHAT WASM DOES AND HOW.
 - read from host system memory
 - write to host system memory
 - add observers for in-vm memory
-- 🏃‍♂️ create a visual representation of the entire machine that can be displayed in a web page
-    - ✅ create an api for interacting with the machine
-    - create a front-end with hardcoded buttons for interacting with the machine, and a display of the current state of the machine
-    - For the observers and the web page -- can the observer be a websocket connections that sends updates?
-
-- `Lt` instruction
 - `Le` instruction
 - `Gt` instruction
 - `Ge` instruction
@@ -27,3 +26,4 @@ IN ORDER TO LEARN MORE COMPLETELY WHAT WASM DOES AND HOW.
 - ✅ division instruction
 - ✅ eq instruction
 - ✅ eqz instruction
+- ✅ `Lt` instruction

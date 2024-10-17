@@ -134,4 +134,23 @@ class Eqz(Instruction):
         top = Pop().execute(state)
         Push(self.fn(1 if top == 0 else 0)).execute(state)
 
+class Lt(Instruction):
+    """
+    Lt compares the top two values of the stack. If the top value is less than
+    the value immediately following it, a 1 is pushed onto the stack. Otherwise,
+    a 0 is pushed onto the stack.
+    """
+    def __init__(self, value_type) -> None:
+        if value_type not in supported_value_types:
+            raise ValueError(f"Unsupported value type: {value_type}")
+        self.value_type = value_type
+        self.fn = num_fns[value_type]
+
+    def execute(self, state: VMState) -> None:
+        a = Pop().execute(state)
+        b = Pop().execute(state)
+        Push(self.fn(b)).execute(state)
+        Push(self.fn(a)).execute(state)
+        Push(self.fn(1 if a < b else 0)).execute(state)
+
 ### Instructions -- end ###

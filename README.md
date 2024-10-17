@@ -125,7 +125,7 @@ using Lynx).
 - `Div`
 - `Eq`
 - `Eqz`
-- `Lt` _coming soon_
+- `Lt`
 - `Le` _coming soon_
 - `Gt` _coming soon_
 - `Ge` _coming soon_
