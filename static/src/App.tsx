@@ -56,14 +56,15 @@ function App() {
       body: JSON.stringify(toSend.map(i => ({ name: i, value: i === "push" ? 17 : undefined, type: "i32" })))
     })
     const jsonSend = await resSend.json()
-    console.log("send", jsonSend)
+    console.log("stack after send", jsonSend)
+    setToSend([])
+
     const resRun = await fetch(`http://localhost:8000/run/${vmId}`, {
       method: 'POST'
     })
     const jsonRun = await resRun.json()
-    console.log("run", jsonRun)
+    console.log("stack after run", jsonRun)
     setStack(jsonRun)
-    setToSend([])
   }
 
 
@@ -103,7 +104,7 @@ function App() {
         </div>
         <div className="card">
           <h2>Stack</h2>
-          <ul>
+          <ul style={{ display: "flex", flexDirection: "column-reverse"}}>
             {stack.map((value, index) => (
               <li key={index+value}>{value}</li>
             ))}
