@@ -19,7 +19,6 @@ IN ORDER TO LEARN MORE COMPLETELY WHAT WASM DOES AND HOW.
 - write to host system memory
 - add observers for in-vm memory
 - `Le` instruction
-- `Gt` instruction
 - `Ge` instruction
 
 - ✅ multiply instruction
@@ -27,3 +26,4 @@ IN ORDER TO LEARN MORE COMPLETELY WHAT WASM DOES AND HOW.
 - ✅ eq instruction
 - ✅ eqz instruction
 - ✅ `Lt` instruction
+- ✅ `Gt` instruction

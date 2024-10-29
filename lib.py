@@ -46,7 +46,7 @@ class Add(Instruction):
     """
     Add is an instruction that pops the top two values from the stack, adds them together, and pushes the result back onto the stack.
     """
-    def __init__(self, value_type: str):
+    def __init__(self, value_type: str) -> None:
         if value_type not in supported_value_types:
             raise ValueError(f"Unsupported value type: {value_type}")
         self.value_type = value_type
@@ -61,7 +61,7 @@ class Sub(Instruction):
     """
     Sub is an instruction that pops the top two values from the stack, subtracts the second one popped from the first one popped, and pushes the result back onto the stack.
     """
-    def __init__(self, value_type: str):
+    def __init__(self, value_type: str) -> None:
         if value_type not in supported_value_types:
             raise ValueError(f"Unsupported value type: {value_type}")
         self.value_type = value_type
@@ -152,5 +152,22 @@ class Lt(Instruction):
         Push(self.fn(b)).execute(state)
         Push(self.fn(a)).execute(state)
         Push(self.fn(1 if a < b else 0)).execute(state)
+
+class Gt(Instruction):
+    """
+    Gt compares the top two values of the stack. If the top value is greater than the value immediately following it, a 1 is pushed onto the stack. Otherwise, a 0 is pushed onto the stack.
+    """
+    def __init__(self, value_type) -> None:
+        if value_type not in supported_value_types:
+            raise ValueError(f"Unsupported value type: {value_type}")
+        self.value_type = value_type
+        self.fn = num_fns[value_type]
+
+    def execute(self, state: VMState) -> Any:
+        a = Pop().execute(state)
+        b = Pop().execute(state)
+        Push(self.fn(b)).execute(state)
+        Push(self.fn(a)).execute(state)
+        Push(self.fn(1 if a > b else 0)).execute(state)
 
 ### Instructions -- end ###

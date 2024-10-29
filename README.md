@@ -41,7 +41,7 @@ how WebAssembly works. Right now, like WebAssembly, it only supports 32- and
 #### Running the API
 
 1. Create a Python virtual environment, e.g. `python3 -m venv venv`.
-1. Activate the virtual environment, e.g. `source venv/bin/activate`.
+1. Activate the virtual environment, e.g. `source .venv/bin/activate`.
 1. Install the dependencies, e.g. `pip install -r requirements.txt`.
 1. Install the API dependency: `pip install "fastapi[standard]"`
 1. Start the API: `fastapi dev main.py`
@@ -127,7 +127,7 @@ using Lynx).
 - `Eqz`
 - `Lt`
 - `Le` _coming soon_
-- `Gt` _coming soon_
+- `Gt`
 - `Ge` _coming soon_
 
 ### Resources

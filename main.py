@@ -9,7 +9,7 @@ from pydantic import BaseModel
 
 from virtual_machine import StackVM
 from functions import num_fns
-from lib import Add, Div, Eq, Eqz, Instruction, Lt, Mul, Pop, Push, Sub
+from lib import Add, Div, Eq, Eqz, Gt, Instruction, Lt, Mul, Pop, Push, Sub
 from shared import WasmValue
 
 vms: dict[str, StackVM] = {}
@@ -33,6 +33,7 @@ cmds: dict[str, ABCMeta] = {
     "div": Div,
     "eq": Eq,
     "eqz": Eqz,
+    "gt": Gt,
     "lt": Lt,
     "mul": Mul,
     "pop": Pop,
