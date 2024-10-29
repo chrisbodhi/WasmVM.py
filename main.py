@@ -76,12 +76,17 @@ def get_or_create_vm(q: str | None = None):
 
 @app.get("/instructions")
 # TODO: improve return type here
-def get_instructions() -> dict[str, list[str]]:
+def get_instructions():
     """
     Return a list of available instructions to use with the stack virtual machine.
     """
-    instructions = cmds.keys()
-    return { "instructions": list(instructions) }
+    instructions = [{
+        "instruction": instruction,
+        "types": ["i32", "i64", "f32", "f64"]
+            if instruction != "eqz" else ["i32", "i64"],
+        "accepts_value": True if instruction == "push" else False
+    } for instruction in cmds.keys() ]
+    return { "instructions": instructions }
 
 
 @app.post("/instructions/{vm_id}")
