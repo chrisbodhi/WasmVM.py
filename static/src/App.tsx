@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
 
 import "./App.css";
+import { Box } from "./Box";
+
+type NumTypes = "i32" | "i64" | "f32" | "f64";
 
 interface Instruction {
   instruction: string;
-  types: string[];
+  types: NumTypes[];
   accepts_value: boolean;
 }
 
@@ -15,7 +18,7 @@ const InstructionButton = ({
   onClick,
 }: Pick<Instruction, "instruction" | "types"> & {
   acceptsValue: boolean;
-  onClick: (instruction: string, type: string, value?: number) => void;
+  onClick: (instruction: string, type: NumTypes, value?: number) => void;
 }) => {
   const [value, setValue] = useState("");
   const [type, setType] = useState(types[0]);
@@ -24,9 +27,9 @@ const InstructionButton = ({
     <form
       onSubmit={(e) => {
         e.preventDefault();
-        onClick(instruction, type, Number(value));
+        onClick(instruction, type, value ? Number(value) : undefined);
         // Reset the state
-        setValue("0");
+        setValue("");
         setType(types[0]);
       }}
       style={{
@@ -34,7 +37,10 @@ const InstructionButton = ({
       }}
     >
       {instruction}
-      <select onChange={(e) => setType(e.target.value)} value={type}>
+      <select
+        onChange={(e) => setType(e.target.value as NumTypes)}
+        value={type}
+      >
         {types.map((t, index) => (
           <option key={index + t} value={t}>
             {t}
@@ -58,7 +64,7 @@ function App() {
   const [toSend, setToSend] = useState<
     {
       instruction: string;
-      type: string;
+      type: NumTypes;
       value?: number;
     }[]
   >([]);
@@ -109,8 +115,8 @@ function App() {
 
   const addInstruction = (
     instruction: string,
-    type: string,
-    value?: number,
+    type: NumTypes,
+    value: number | undefined,
   ) => {
     setToSend([...toSend, { instruction, type, value }]);
   };
@@ -201,10 +207,13 @@ function App() {
             <ul style={{ display: "flex", flexDirection: "column-reverse" }}>
               {toSend.map(({ instruction, type, value }, index) => (
                 <li key={index + instruction}>
-                  <span>{instruction}</span>
-                  <sub>{type}</sub>
-                  {value !== undefined && <sup>{value}</sup>}
-                  <button onClick={() => handleRemove(index)}>x</button>
+                  <Box
+                    instruction={instruction}
+                    type={type}
+                    value={value}
+                    index={index}
+                    handleRemove={handleRemove}
+                  />
                 </li>
               ))}
             </ul>

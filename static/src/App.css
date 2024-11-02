@@ -1,10 +1,45 @@
 #root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 2rem;
+    text-align: center;
 }
 
 .card {
-  padding: 2em;
+    padding: 2em;
+}
+
+.wrapper {
+    display: flex;
+    align-items: baseline;
+}
+
+.instruction {
+    /* color: white; */
+    text-transform: uppercase;
+    font-weight: bold;
+    margin: 0.5rem;
+}
+
+.i32Box {
+    background-color: salmon;
+    border-radius: 0.25rem;
+    border: 1px solid tomato;
+    color: tomato;
+    font-weight: bold;
+    margin: 0.25rem;
+    padding: 0.5rem;
+    display: flex;
+    align-items: baseline;
+}
+
+.i32Value {
+    font-size: 1rem;
+    font-weight: bold;
+    color: black;
+    background-color: white;
+    border-radius: 0.25rem;
+    padding: 0.25rem;
+    margin: 0.25rem;
+    border: 1px solid tomato;
 }
