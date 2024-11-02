@@ -106,6 +106,9 @@ function App() {
     setToSend([...toSend, { instruction, type, value }]);
   };
 
+  const handleRemove = (index: number) =>
+    setToSend(toSend.filter((_, i) => i !== index));
+
   const sendInstructions = async () => {
     const resSend = await fetch(`http://localhost:8000/instructions/${vmId}`, {
       method: "POST",
@@ -172,6 +175,7 @@ function App() {
                   <span>{instruction}</span>
                   <sub>{type}</sub>
                   {value !== undefined && <sup>{value}</sup>}
+                  <button onClick={() => handleRemove(index)}>x</button>
                 </li>
               ))}
             </ul>

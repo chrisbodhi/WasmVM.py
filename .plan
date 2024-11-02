@@ -7,7 +7,7 @@ IN ORDER TO LEARN MORE COMPLETELY WHAT WASM DOES AND HOW.
     - ✅ create an api for interacting with the machine
     - ✅ create a front-end with hardcoded buttons for interacting with the machine, and a display of the current state of the machine
     - Make InstructionButton look nice
-    - 🏃‍♂️ Add ability to delete an instruction from the "Instructions to send" column
+    - ✅ Add ability to delete an instruction from the "Instructions to send" column
     - Add ability to edit an instruction from the "Instructions to send" column
     - Add ability to set page size when creating a machine
     - Would we like a step button for executing instructions?
