@@ -7,13 +7,13 @@ def i32(value: int) -> int:
     """
     Truncate numbers greater than 32 bits down to 32 bits
     """
-    return value & 0xFFFFFFFF
+    return int(value) & 0xFFFFFFFF
 
 def i64(value: int) -> int:
     """
     Truncate numbers greater than 64 bits down to 64 bits
     """
-    return value & 0xFFFFFFFFFFFFFFFF
+    return int(value) & 0xFFFFFFFFFFFFFFFF
 
 def f32(value: float) -> float:
     """
