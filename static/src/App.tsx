@@ -62,8 +62,10 @@ function App() {
       value?: number;
     }[]
   >([]);
-  const [vmId, setVmId] = useState("");
+  const [pages, setPages] = useState(0);
+  const [maxPages, setMaxPages] = useState(0);
   const [stack, setStack] = useState([]);
+  const [vmId, setVmId] = useState("");
 
   useEffect(() => {
     getOrSetVM();
@@ -82,6 +84,13 @@ function App() {
   function getVM() {
     fetch("http://localhost:8000/create", {
       method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        pages,
+        max_pages: maxPages,
+      }),
     })
       .then((res) => res.json())
       .then((json) => {
@@ -145,7 +154,27 @@ function App() {
           {instructions.length === 0 && (
             <button onClick={fetchInstructions}>Get instructions</button>
           )}
-          <button onClick={getVM}>Get a new VM</button>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+            }}
+          >
+            <label>
+              Pages
+              <input
+                type="number"
+                onChange={(event) => setPages(Number(event.target.value))}
+              />
+            </label>
+            <label>
+              Max pages
+              <input
+                type="number"
+                onChange={(event) => setMaxPages(Number(event.target.value))}
+              />
+            </label>
+            <button onClick={() => getVM()}>Get a new VM</button>
+          </form>
         </div>
         <div style={{ display: "flex" }}>
           <div className="card">

@@ -46,6 +46,10 @@ class RPC(BaseModel):
     type: Literal["i32", "i64", "f32", "f64"] | None = None
     value: WasmValue | None = None
 
+class Dimensions(BaseModel):
+    pages: int
+    max_pages: int
+
 def map_to_instruct(rpcs: list[RPC]) -> list[Instruction]:
     instructions: list[Instruction] = []
     for rpc in rpcs:
@@ -60,7 +64,7 @@ def map_to_instruct(rpcs: list[RPC]) -> list[Instruction]:
     return instructions
 
 @app.post("/create")
-def get_or_create_vm(q: str | None = None):
+def get_or_create_vm(q: str | None = None, dimensions: Dimensions | None = None):
     """
     Get an existing stack virtual machine, or create a new one.
     """
@@ -69,8 +73,12 @@ def get_or_create_vm(q: str | None = None):
     if q and q in vms:
         return vms[q], q
     else:
+        if dimensions:
+            pages, max_pages = dimensions.pages, dimensions.max_pages
+        else:
+            pages, max_pages = 0, 0
         id = str(uuid.uuid4())
-        vm = StackVM()
+        vm = StackVM(pages, max_pages)
         vms[id] = vm
         return vm, id
 
