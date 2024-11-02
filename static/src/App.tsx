@@ -177,7 +177,7 @@ function App() {
             </ul>
           </div>
           <div className="card">
-            <button onClick={sendInstructions}>
+            <button onClick={sendInstructions} disabled={!toSend.length}>
               <big>Send instructions</big>
             </button>
           </div>
