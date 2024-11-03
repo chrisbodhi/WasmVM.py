@@ -121,6 +121,15 @@ function App() {
     setToSend([...toSend, { instruction, type, value }]);
   };
 
+  const handleValueChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    index: number,
+  ) => {
+    const value = Number(e.target.value);
+    const newSend = toSend.map((s, i) => (i === index ? { ...s, value } : s));
+    setToSend(newSend);
+  };
+
   const handleRemove = (index: number) =>
     setToSend(toSend.filter((_, i) => i !== index));
 
@@ -212,6 +221,7 @@ function App() {
                     type={type}
                     value={value}
                     index={index}
+                    handleChange={(e) => handleValueChange(e, index)}
                     handleRemove={handleRemove}
                   />
                 </li>
