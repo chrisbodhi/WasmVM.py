@@ -2,22 +2,25 @@ THE GOAL HERE IS TO CREATE A SIMPLE WASM-LIKE MACHINE IN PYTHON
 IN ORDER TO LEARN MORE COMPLETELY WHAT WASM DOES AND HOW.
 
 - 🏃‍♂️ zomg, unit tests, please. push(6), push(-6), sub() --> 12
-- fix defect: when instruction needs to pop from an empty list
-- ui: show when there's an error
-- add button to clear the stack in the UI
+- 🚢 fix defect: when instruction needs to pop from an empty list
+- 🚢 fix defect: sending Pop instruction errors because Pop takes no arguments, see main.py:62 for where error throws
+- 🚢 ui: show when there's an error
 - ✅ fix defect: stack was [6], add instructions via web client: [{name: "push", type: "i32", value: 12}, {name: "div", type: "i32"}]; running this failed with a 500 error; float and int issues? got something similar with "add"
 - 🏃‍♂️ create a visual representation of the entire machine that can be displayed in a web page
     - ✅ create an api for interacting with the machine
     - ✅ create a front-end with hardcoded buttons for interacting with the machine, and a display of the current state of the machine
-    - Make InstructionButton look nice
+    - 🚢🚢 Make InstructionButton look nice
+    - 🚢 Make stack divs look just ok
     - ✅ Add ability to delete an instruction from the "Instructions to send" column
     - ✅ Add ability to edit an instruction from the "Instructions to send" column -- needs a new component
     - ✅ Add ability to set page size when creating a machine
-    - Make ability to set page size look nice
+    - 🚢🚢 Make ability to set page size look nice
     - Would we like a step button for executing instructions?
         - With undo/redo?
-    - Add an observer to the machine that sends updates to the front-end
+    - *Add an observer to the machine that sends updates to the front-end* -- how deeply do I want to dive into this? it seemed important at the start, but maybe with the response from the API, it's not as important.
     - For the observers and the web page -- can the observer be a websocket connections that sends updates?
+    - 🚢🚢🚢 Add a database, instead of relying on in-memory storage ;)
+    - add button to clear the stack in the UI
 - add in-vm memory of a specified capacity
     - ✅ start with creating a single page of memory, add support for adding up to n pages via stack instruction; check that max size is not exceeded
       - ✅ (memory (export "meme") 1 10) requests a block of memory that's 1 page long, with a maximum of 10 pages
@@ -29,6 +32,7 @@ IN ORDER TO LEARN MORE COMPLETELY WHAT WASM DOES AND HOW.
 - read from host system memory
 - write to host system memory
 - add observers for in-vm memory
+- improve return type for get_instructions API call
 - `Le` instruction
 - `Ge` instruction
 
