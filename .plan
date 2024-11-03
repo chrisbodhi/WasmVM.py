@@ -2,6 +2,9 @@ THE GOAL HERE IS TO CREATE A SIMPLE WASM-LIKE MACHINE IN PYTHON
 IN ORDER TO LEARN MORE COMPLETELY WHAT WASM DOES AND HOW.
 
 - 🏃‍♂️ zomg, unit tests, please. push(6), push(-6), sub() --> 12
+- fix defect: when instruction needs to pop from an empty list
+- ui: show when there's an error
+- add button to clear the stack in the UI
 - ✅ fix defect: stack was [6], add instructions via web client: [{name: "push", type: "i32", value: 12}, {name: "div", type: "i32"}]; running this failed with a 500 error; float and int issues? got something similar with "add"
 - 🏃‍♂️ create a visual representation of the entire machine that can be displayed in a web page
     - ✅ create an api for interacting with the machine
