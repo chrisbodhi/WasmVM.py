@@ -83,7 +83,6 @@ def get_or_create_vm(q: str | None = None, dimensions: Dimensions | None = None)
         return vm, id
 
 @app.get("/instructions")
-# TODO: improve return type here
 def get_instructions():
     """
     Return a list of available instructions to use with the stack virtual machine.
