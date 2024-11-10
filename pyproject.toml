@@ -1,0 +1,13 @@
+[project]
+name = "WasmVM.py"
+version = "0.0.1"
+authors = [{ name = "chris boette", email = "chrisbodhi@gmail.com" }]
+description = "A stack-based virtual machine for learning about WebAssembly’"
+readme = "README.md"
+license = { text = "BSD-3-Clause" }
+requires-python = ">=3.12"
+classifiers = ["Programming Language :: Python :: 3"]
+
+[project.urls]
+Homepage = "https://github.com/chrisbodhi/WasmVM.py"
+Issues = "https://github.com/chrisbodhi/WasmVM.py/issues"

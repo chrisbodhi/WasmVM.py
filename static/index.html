@@ -1,13 +1,33 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + React + TS</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+    <head>
+        <meta charset="UTF-8" />
+        <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Vite + React + TS</title>
+        <script src="https://cdn.jsdelivr.net/pyodide/v0.26.3/full/pyodide.js"></script>
+    </head>
+    <body>
+        <div id="root"></div>
+        <script type="module" src="/src/main.tsx"></script>
+        <script type="text/javascript">
+            async function main() {
+                const wheelUrl =
+                    "https://test-files.pythonhosted.org/packages/eb/08/f030eea4e6de357782befa5b2435cf3b9c1684e6cbf7a78dae15a1657512/WasmVM.py-0.0.1-py3-none-any.whl";
+                let pyodide = await loadPyodide();
+                await pyodide.loadPackage("micropip");
+                const micropip = pyodide.pyimport("micropip");
+                await micropip.install(wheelUrl);
+                pyodide.runPython(`
+                    from lib import Add
+                    print(Add)
+                `);
+            }
+            try {
+                main();
+            } catch (e) {
+                console.error(e);
+            }
+        </script>
+    </body>
 </html>

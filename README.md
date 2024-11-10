@@ -1,5 +1,5 @@
 # WasmVM.py
-## A stack-based virtual machine for learning WebAssembly
+## A stack-based virtual machine for learning about WebAssembly
 
 This is a simple stack-based virtual machine that can execute a small set of
 instructions. It is intended to be the starting point for learning more deeply
@@ -129,6 +129,14 @@ using Lynx).
 - `Le` _coming soon_
 - `Gt`
 - `Ge` _coming soon_
+
+### Building
+
+```sh
+python -m build
+# Upload wheel to testpypi
+python -m twine upload --verbose --repository testpypi dist/*
+```
 
 ### Resources
 
