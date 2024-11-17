@@ -39,6 +39,8 @@ how WebAssembly works. Right now, like WebAssembly, it only supports 32- and
 
 #### Running the API
 
+_Deprecation warning_: The API is being deprecated in favor of loading the VM in the browser, by way of [Pyodide](https://pyodide.org).
+
 1. Create a Python virtual environment, e.g. `python3 -m venv venv`.
 1. Activate the virtual environment, e.g. `source .venv/bin/activate`.
 1. Install the dependencies, e.g. `pip install -r requirements.txt`.
@@ -138,8 +140,10 @@ python -m pip install -r requirements.txt
 python -m pip install -e .
 # Build wheel
 python -m build
-# Upload wheel to testpypi
+# Upload wheel to testpypi -- expects a ~/.pypirc file with credentials
 python -m twine upload --verbose --repository testpypi dist/*
+# Upload wheel to pypi -- expects a ~/.pypirc file with credentials
+python -m twine upload --verbose dist/*
 ```
 
 ### Resources
