@@ -1,5 +1,5 @@
 # WasmVM.py
-## A stack-based virtual machine for learning WebAssembly
+## A stack-based virtual machine for learning about WebAssembly
 
 This is a simple stack-based virtual machine that can execute a small set of
 instructions. It is intended to be the starting point for learning more deeply
@@ -11,11 +11,10 @@ how WebAssembly works. Right now, like WebAssembly, it only supports 32- and
 #### Basic usage
 
 1. Open the Python REPL by running `python3` in your terminal.
+1. Install the package `wasmvm` by running `pip install wasmvm`.
 1. Import the `StackVM` class and instructions.
     ```python
-    from virtual_machine import StackVM
-    from lib import Add, Sub, Push
-    from functions import i32
+    from wasmvm import StackVM, Add, Sub, Push, i32
     ```
 1. Create an instance of the `StackVM` class.
     ```python
@@ -129,6 +128,19 @@ using Lynx).
 - `Le` _coming soon_
 - `Gt`
 - `Ge` _coming soon_
+
+### Building
+
+```sh
+source venv/bin/activate
+python -m pip install -r requirements.txt
+# Install dev version locally
+python -m pip install -e .
+# Build wheel
+python -m build
+# Upload wheel to testpypi
+python -m twine upload --verbose --repository testpypi dist/*
+```
 
 ### Resources
 

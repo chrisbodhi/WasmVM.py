@@ -1,8 +1,8 @@
 from abc import ABC, abstractmethod
 from typing import Any
 
-from shared import VMState, WasmValue, make_page
-from functions import num_fns
+from wasmvm.shared import VMState, WasmValue, make_page
+from wasmvm.functions import num_fns
 
 supported_value_types = list(num_fns.keys())
 
