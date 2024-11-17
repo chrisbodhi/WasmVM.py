@@ -2,9 +2,16 @@ THE GOAL HERE IS TO CREATE A SIMPLE WASM-LIKE MACHINE IN PYTHON
 IN ORDER TO LEARN MORE COMPLETELY WHAT WASM DOES AND HOW.
 
 - 🏃‍♂️ zomg, unit tests, please. push(6), push(-6), sub() --> 12
+- 🚢 port API functionality to wasm-exposed commands
+    - ✅ create vm
+    - get instructions
+    - send instructions
+    - run instructions (should this be combined with sending?)
+    - 🏃‍♂️ inspect vm
 - 🚢 fix defect: when instruction needs to pop from an empty list
 - 🚢 fix defect: sending Pop instruction errors because Pop takes no arguments, see main.py:62 for where error throws
 - 🚢 ui: show when there's an error
+- 🚢🚢 Install Pyodide via package.json
 - ✅ fix defect: stack was [6], add instructions via web client: [{name: "push", type: "i32", value: 12}, {name: "div", type: "i32"}]; running this failed with a 500 error; float and int issues? got something similar with "add"
 - 🏃‍♂️ create a visual representation of the entire machine that can be displayed in a web page
     - ✅ create an api for interacting with the machine

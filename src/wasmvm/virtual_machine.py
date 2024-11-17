@@ -1,11 +1,14 @@
 from typing import Callable
 
-from functions import i32
-from lib import Instruction, Push, VMState
+from wasmvm.functions import i32
+from wasmvm.lib import Instruction, Push, VMState
 
 class StackVM:
-    def __init__(self, pages: int = 0, max_pages: int = 0):
-        self.state = VMState(pages, max_pages)
+    """
+    This docstring shows up when we run the `help` command in the interpreter. Neat!
+    """
+    def __init__(self, pages: int = 0, max_pages: int = 1):
+        self.state = VMState(pages, max(pages, max_pages))
         self.instructions: list[Instruction] = []
         self.observers: list[Callable[[VMState], None]] = []
 

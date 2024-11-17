@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import "./App.css";
 import { Box } from "./Box";
@@ -10,6 +10,20 @@ interface Instruction {
   types: NumTypes[];
   accepts_value: boolean;
 }
+
+const WHEEL_URL =
+  "https://files.pythonhosted.org/packages/91/b2/d798c9f63876e2551b62afdd5cb39b9ddfe15b16ab29c3b3503a206e628e/WasmVM-0.1.0-py3-none-any.whl";
+
+// @ts-expect-error -- loaded from script tag in index.html
+const pyodide = await loadPyodide();
+await pyodide.loadPackage("micropip");
+const micropip = pyodide.pyimport("micropip");
+await micropip.install(WHEEL_URL);
+pyodide.runPython(`
+    from wasmvm import StackVM
+    vm = StackVM()
+    print(f"!!program counter: {vm.state.pc}")
+`);
 
 const InstructionButton = ({
   instruction,
@@ -32,7 +46,7 @@ const InstructionButton = ({
         setValue("");
         setType(types[0]);
       }}
-      style={{
+       {{
         backgroundColor: acceptsValue ? "lightgreen" : "lightcoral",
       }}
     >
@@ -69,42 +83,19 @@ function App() {
     }[]
   >([]);
   const [pages, setPages] = useState(0);
-  const [maxPages, setMaxPages] = useState(0);
+  const [maxPages, setMaxPages] = useState(1);
   const [stack, setStack] = useState([]);
+  const [vm, setVm] = useState(null);
   const [vmId, setVmId] = useState("");
 
-  useEffect(() => {
-    getOrSetVM();
-  });
-
-  function getOrSetVM() {
-    // read from localStorage to get the vmId
-    const vmId = localStorage.getItem("vmId");
-    if (vmId) {
-      setVmId(vmId);
-    } else {
-      getVM();
-    }
-  }
-
   function getVM() {
-    fetch("http://localhost:8000/create", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        pages,
-        max_pages: maxPages,
-      }),
-    })
-      .then((res) => res.json())
-      .then((json) => {
-        const [, vmId] = json;
-        setVmId(vmId);
-        localStorage.setItem("vmId", vmId);
-        setStack([]);
-      });
+    pyodide.runPython(`
+        from wasmvm import StackVM
+        vm = StackVM(${pages}, ${maxPages})
+        print(f"Got a VM! It has ${pages} pages and can have up to ${maxPages} pages.")
+    `);
+    const vm = pyodide.globals.get("vm");
+    setVm(vm);
   }
 
   const fetchInstructions = async () => {
@@ -162,7 +153,7 @@ function App() {
   return (
     <>
       <header>
-        <h1>wasmvm.py</h1>
+        <h1>WasmVM.py</h1>
       </header>
       <main>
         <div>

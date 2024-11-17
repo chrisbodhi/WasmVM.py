@@ -1,7 +1,7 @@
 import struct
 from typing import Callable
 
-from shared import WasmValue
+from wasmvm.shared import WasmValue
 
 def i32(value: int) -> int:
     """

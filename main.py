@@ -7,10 +7,10 @@ from fastapi.exceptions import HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
-from virtual_machine import StackVM
-from functions import num_fns
-from lib import Add, Div, Eq, Eqz, Gt, Instruction, Lt, Mul, Pop, Push, Sub
-from shared import WasmValue
+from wasmvm.virtual_machine import StackVM
+from wasmvm.functions import num_fns
+from wasmvm.lib import Add, Div, Eq, Eqz, Gt, Instruction, Lt, Mul, Pop, Push, Sub
+from wasmvm.shared import WasmValue
 
 vms: dict[str, StackVM] = {}
 
@@ -76,7 +76,7 @@ def get_or_create_vm(q: str | None = None, dimensions: Dimensions | None = None)
         if dimensions:
             pages, max_pages = dimensions.pages, dimensions.max_pages
         else:
-            pages, max_pages = 0, 0
+            pages, max_pages = 0, 1
         id = str(uuid.uuid4())
         vm = StackVM(pages, max_pages)
         vms[id] = vm
