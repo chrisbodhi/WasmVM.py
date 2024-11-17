@@ -14,16 +14,16 @@ interface Instruction {
 const WHEEL_URL =
   "https://files.pythonhosted.org/packages/91/b2/d798c9f63876e2551b62afdd5cb39b9ddfe15b16ab29c3b3503a206e628e/WasmVM-0.1.0-py3-none-any.whl";
 
-// @ts-expect-error -- loaded from script tag in index.html
-const pyodide = await loadPyodide();
-await pyodide.loadPackage("micropip");
-const micropip = pyodide.pyimport("micropip");
-await micropip.install(WHEEL_URL);
-pyodide.runPython(`
-    from wasmvm import StackVM
-    vm = StackVM()
-    print(f"!!program counter: {vm.state.pc}")
-`);
+// @ts-expect-error -- untyped until we install from package.json
+let pyodide;
+
+(async function () {
+  // @ts-expect-error -- loaded from script tag in index.html
+  pyodide = await loadPyodide();
+  await pyodide.loadPackage("micropip");
+  const micropip = pyodide.pyimport("micropip");
+  await micropip.install(WHEEL_URL);
+})();
 
 const InstructionButton = ({
   instruction,
