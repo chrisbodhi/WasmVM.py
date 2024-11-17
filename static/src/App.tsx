@@ -46,7 +46,7 @@ const InstructionButton = ({
         setValue("");
         setType(types[0]);
       }}
-       {{
+      style={{
         backgroundColor: acceptsValue ? "lightgreen" : "lightcoral",
       }}
     >
