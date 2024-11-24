@@ -3,12 +3,36 @@ import { useState } from "react";
 import "./App.css";
 import { Box } from "./Box";
 
+// eslint-disable-next-line
+type PyProxy = any;
+
+interface VM {
+  pages: number;
+  max_pages: number;
+  inspect: () => string[];
+  instructions: Array<unknown>;
+  run: () => void;
+}
+
 type NumTypes = "i32" | "i64" | "f32" | "f64";
 
+const commands = [
+  "add",
+  "div",
+  "eq",
+  "eqz",
+  "gt",
+  "lt",
+  "mul",
+  "pop",
+  "push",
+  "sub",
+] as const;
+
 interface Instruction {
-  instruction: string;
+  instruction: (typeof commands)[number];
   types: NumTypes[];
-  accepts_value: boolean;
+  acceptsValue: boolean;
 }
 
 const WHEEL_URL =
@@ -23,6 +47,13 @@ let pyodide;
   await pyodide.loadPackage("micropip");
   const micropip = pyodide.pyimport("micropip");
   await micropip.install(WHEEL_URL);
+
+  if (import.meta.env.DEV) {
+    pyodide.setDebug(true);
+    console.log("THIS. IS. DEV.");
+  } else {
+    console.log("THIS. IS. PROD.");
+  }
 })();
 
 const InstructionButton = ({
@@ -77,16 +108,15 @@ function App() {
   const [instructions, setInstructions] = useState<Instruction[]>([]);
   const [toSend, setToSend] = useState<
     {
-      instruction: string;
+      instruction: (typeof commands)[number];
       type: NumTypes;
       value?: number;
     }[]
   >([]);
   const [pages, setPages] = useState(0);
   const [maxPages, setMaxPages] = useState(1);
-  const [stack, setStack] = useState([]);
-  const [vm, setVm] = useState(null);
-  const [vmId, setVmId] = useState("");
+  const [stack, setStack] = useState<string[]>([]);
+  const [vm, setVm] = useState<VM>();
 
   function getVM() {
     pyodide.runPython(`
@@ -99,13 +129,16 @@ function App() {
   }
 
   const fetchInstructions = async () => {
-    const res = await fetch("http://localhost:8000/instructions");
-    const json = await res.json();
-    setInstructions(json.instructions);
+    const rawInstructions: Instruction[] = commands.map((cmd) => ({
+      instruction: cmd,
+      types: cmd === "eqz" ? ["i32", "i64"] : ["i32", "i64", "f32", "f64"],
+      acceptsValue: cmd === "push",
+    }));
+    setInstructions(rawInstructions);
   };
 
   const addInstruction = (
-    instruction: string,
+    instruction: (typeof commands)[number],
     type: NumTypes,
     value: number | undefined,
   ) => {
@@ -125,29 +158,52 @@ function App() {
     setToSend(toSend.filter((_, i) => i !== index));
 
   const sendInstructions = async () => {
-    const resSend = await fetch(`http://localhost:8000/instructions/${vmId}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(
-        toSend.map(({ instruction, type, value }) => ({
-          name: instruction,
-          type,
-          value,
-        })),
-      ),
-    });
-    const jsonSend = await resSend.json();
-    console.log("stack after send", jsonSend);
-    setToSend([]);
+    if (!vm) {
+      console.error("No VM; get one");
+      return;
+    }
 
-    const resRun = await fetch(`http://localhost:8000/run/${vmId}`, {
-      method: "POST",
+    // Add the instructions to the VM from toSend
+    const mapping: Record<(typeof commands)[number] | NumTypes, PyProxy> = {
+      add: pyodide.pyimport("wasmvm.Add"),
+      div: pyodide.pyimport("wasmvm.Div"),
+      eq: pyodide.pyimport("wasmvm.Eq"),
+      eqz: pyodide.pyimport("wasmvm.Eqz"),
+      f32: pyodide.pyimport("wasmvm.f32"),
+      f64: pyodide.pyimport("wasmvm.f64"),
+      gt: pyodide.pyimport("wasmvm.Gt"),
+      i32: pyodide.pyimport("wasmvm.i32"),
+      i64: pyodide.pyimport("wasmvm.i64"),
+      lt: pyodide.pyimport("wasmvm.Lt"),
+      mul: pyodide.pyimport("wasmvm.Mul"),
+      pop: pyodide.pyimport("wasmvm.Pop"),
+      push: pyodide.pyimport("wasmvm.Push"),
+      sub: pyodide.pyimport("wasmvm.Sub"),
+    };
+
+    const ins = toSend.map((s) => {
+      const instruction = mapping[s.instruction];
+      return s.value !== undefined
+        ? instruction(mapping[s.type](s.value))
+        : instruction(mapping[s.type]);
     });
-    const jsonRun = await resRun.json();
-    console.log("stack after run", jsonRun);
-    setStack(jsonRun);
+
+    vm.instructions = pyodide.toPy(ins);
+    vm.run();
+
+    setToSend([]);
+    setStack(vm.inspect());
+
+    // const jsonSend = await resSend.json();
+    // console.log("stack after send", jsonSend);
+    // setToSend([]);
+
+    // const resRun = await fetch(`http://localhost:8000/run/${vmId}`, {
+    //   method: "POST",
+    // });
+    // const jsonRun = await resRun.json();
+    // console.log("stack after run", jsonRun);
+    // setStack(jsonRun);
   };
 
   return (
@@ -160,6 +216,12 @@ function App() {
           {instructions.length === 0 && (
             <button onClick={fetchInstructions}>Get instructions</button>
           )}
+          <div>
+            VM contents: {vm ? JSON.stringify(vm.inspect()) : "Get a new VM"}
+          </div>
+          <div>
+            VM instructions: {vm ? JSON.stringify(vm.instructions) : "None"}
+          </div>
           <form
             onSubmit={(e) => {
               e.preventDefault();
@@ -186,7 +248,7 @@ function App() {
           <div className="card">
             <ul>
               {instructions.map(
-                ({ instruction, types, accepts_value }, index) => (
+                ({ instruction, types, acceptsValue }, index) => (
                   <li
                     key={index + instruction}
                     style={{ listStyle: "none", margin: "0.5rem" }}
@@ -194,7 +256,7 @@ function App() {
                     <InstructionButton
                       instruction={instruction}
                       types={types}
-                      acceptsValue={accepts_value}
+                      acceptsValue={acceptsValue}
                       onClick={addInstruction}
                     />
                   </li>
