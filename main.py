@@ -41,14 +41,17 @@ cmds: dict[str, ABCMeta] = {
     "sub": Sub,
 }
 
+
 class RPC(BaseModel):
     name: str
     type: Literal["i32", "i64", "f32", "f64"] | None = None
     value: WasmValue | None = None
 
+
 class Dimensions(BaseModel):
     pages: int
     max_pages: int
+
 
 def map_to_instruct(rpcs: list[RPC]) -> list[Instruction]:
     instructions: list[Instruction] = []
@@ -62,6 +65,7 @@ def map_to_instruct(rpcs: list[RPC]) -> list[Instruction]:
             instruct = cmd(type)
         instructions.append(instruct)
     return instructions
+
 
 @app.post("/create")
 def get_or_create_vm(q: str | None = None, dimensions: Dimensions | None = None):
@@ -82,10 +86,12 @@ def get_or_create_vm(q: str | None = None, dimensions: Dimensions | None = None)
         vms[id] = vm
         return vm, id
 
+
 @app.get("/instructions")
 def get_instructions():
     """
-    Return a list of available instructions to use with the stack virtual machine.
+    Return a list of available instructions to use with
+    the stack virtual machine.
     """
     instructions = [{
         "instruction": instruction,

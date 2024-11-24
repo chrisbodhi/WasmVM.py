@@ -1,7 +1,6 @@
 import struct
 from typing import Callable
 
-from wasmvm.shared import WasmValue
 
 def i32(value: int) -> int:
     """
@@ -9,11 +8,13 @@ def i32(value: int) -> int:
     """
     return int(value) & 0xFFFFFFFF
 
+
 def i64(value: int) -> int:
     """
     Truncate numbers greater than 64 bits down to 64 bits
     """
     return int(value) & 0xFFFFFFFFFFFFFFFF
+
 
 def f32(value: float) -> float:
     """
@@ -22,11 +23,13 @@ def f32(value: float) -> float:
     """
     return struct.unpack('f', struct.pack('f', value))[0]
 
+
 def f64(value: float) -> float:
     """
     Identity function; Python's float is already 64-bit
     """
     return value
+
 
 num_fns: dict[str, Callable] = {
     "i32": i32,
