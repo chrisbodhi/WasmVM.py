@@ -12,13 +12,22 @@
 .wrapper {
     display: flex;
     align-items: baseline;
+    border: 1px solid tomato;
+    border-radius: 0.125rem;
 }
 
 .instruction {
     /* color: white; */
     text-transform: uppercase;
     font-weight: bold;
-    margin: 0.5rem;
+    /* margin: 0.5rem; */
+    border-right: 1px solid tomato;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    font-family: monospace;
+    font-size: xx-large;
 }
 
 .i32Box {
