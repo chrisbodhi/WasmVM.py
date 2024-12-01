@@ -13,6 +13,7 @@ IN ORDER TO LEARN MORE COMPLETELY WHAT WASM DOES AND HOW.
 - 🚢 ui: show when there's an error
 - 🚢 ui: add a loading screen for first load -- blank page on mobile when starting
 - 🏃‍♂️ refactor calling of number type to be consistently strings, not string or function call
+- ✅ instructions should be empty after run method call
 - 🚢🚢 Install Pyodide via package.json
 - ✅ fix defect: stack was [6], add instructions via web client: [{name: "push", type: "i32", value: 12}, {name: "div", type: "i32"}]; running this failed with a 500 error; float and int issues? got something similar with "add"
 - 🏃‍♂️ create a visual representation of the entire machine that can be displayed in a web page

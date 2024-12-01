@@ -32,3 +32,4 @@ class StackVM:
             self.execute(instruction)
             self.state.pc += 1
         self.state.pc = 0
+        self.instructions = []

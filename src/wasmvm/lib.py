@@ -1,10 +1,11 @@
 from abc import ABC, abstractmethod
-from typing import Any
+from typing import Any, Literal
 
 from wasmvm.shared import VMState, WasmValue, make_page
 from wasmvm.functions import num_fns
 
-supported_value_types = list(num_fns.keys())
+
+supported_types =  ["i32", "i64", "f32", "f64"]
 
 
 class Instruction(ABC):
@@ -19,11 +20,13 @@ class Push(Instruction):
     Push is an instruction that pushes a value onto the top of the stack.
     """
 
-    def __init__(self, value: WasmValue):
+    def __init__(self, value: WasmValue, value_type: Literal["i32", "i64", "f32", "f64"]):
         self.value = value
+        self.value_type = value_type
 
     def execute(self, state: VMState) -> None:
-        state.stack.append(self.value)
+        type_fn = num_fns[self.value_type]
+        state.stack.append(type_fn(self.value))
 
 
 class Pop(Instruction):
@@ -58,8 +61,8 @@ class Add(Instruction):
     the stack.
     """
 
-    def __init__(self, value_type: str) -> None:
-        if value_type not in supported_value_types:
+    def __init__(self, value_type: Literal["i32", "i64", "f32", "f64"]) -> None:
+        if value_type not in supported_types:
             raise ValueError(f"Unsupported value type: {value_type}")
         self.value_type = value_type
         self.fn = num_fns[value_type]
@@ -67,7 +70,9 @@ class Add(Instruction):
     def execute(self, state: VMState) -> None:
         b = Pop().execute(state)
         a = Pop().execute(state)
-        Push(self.fn(a + b)).execute(state)
+        # TODO: determine how to pass in the expected type here,
+        # now that the API has changed.
+        Push(self.fn(a + b), self.value_type).execute(state)
 
 
 class Sub(Instruction):
@@ -78,7 +83,7 @@ class Sub(Instruction):
     """
 
     def __init__(self, value_type: str) -> None:
-        if value_type not in supported_value_types:
+        if value_type not in supported_types:
             raise ValueError(f"Unsupported value type: {value_type}")
         self.value_type = value_type
         self.fn = num_fns[value_type]
@@ -86,7 +91,7 @@ class Sub(Instruction):
     def execute(self, state: VMState) -> None:
         b = Pop().execute(state)
         a = Pop().execute(state)
-        Push(self.fn(a - b)).execute(state)
+        Push(self.fn(a - b), self.value_type).execute(state)
 
 
 class Mul(Instruction):
@@ -96,7 +101,7 @@ class Mul(Instruction):
     """
 
     def __init__(self, value_type) -> None:
-        if value_type not in supported_value_types:
+        if value_type not in supported_types:
             raise ValueError(f"Unsupported value type: {value_type}")
         self.value_type = value_type
         self.fn = num_fns[value_type]
@@ -104,7 +109,7 @@ class Mul(Instruction):
     def execute(self, state: VMState) -> None:
         a = Pop().execute(state)
         b = Pop().execute(state)
-        Push(self.fn(a * b)).execute(state)
+        Push(self.fn(a * b), self.value_type).execute(state)
 
 
 class Div(Instruction):
@@ -115,7 +120,7 @@ class Div(Instruction):
     """
 
     def __init__(self, value_type) -> None:
-        if value_type not in supported_value_types:
+        if value_type not in supported_types:
             raise ValueError(f"Unsupported value type: {value_type}")
         self.value_type = value_type
         self.fn = num_fns[value_type]
@@ -123,7 +128,7 @@ class Div(Instruction):
     def execute(self, state: VMState) -> None:
         dividend = Pop().execute(state)
         divisor = Pop().execute(state)
-        Push(self.fn(dividend / divisor)).execute(state)
+        Push(self.fn(dividend / divisor), self.value_type).execute(state)
 
 
 class Eq(Instruction):
@@ -133,7 +138,7 @@ class Eq(Instruction):
     """
 
     def __init__(self, value_type) -> None:
-        if value_type not in supported_value_types:
+        if value_type not in supported_types:
             raise ValueError(f"Unsupported value type: {value_type}")
         self.value_type = value_type
         self.fn = num_fns[value_type]
@@ -141,7 +146,7 @@ class Eq(Instruction):
     def execute(self, state: VMState) -> None:
         a = Pop().execute(state)
         b = Pop().execute(state)
-        Push(self.fn(1 if a == b else 0)).execute(state)
+        Push(self.fn(1 if a == b else 0), self.value_type).execute(state)
 
 
 class Eqz(Instruction):
@@ -160,7 +165,7 @@ class Eqz(Instruction):
 
     def execute(self, state: VMState) -> None:
         top = Pop().execute(state)
-        Push(self.fn(1 if top == 0 else 0)).execute(state)
+        Push(self.fn(1 if top == 0 else 0), self.value_type).execute(state)
 
 
 class Lt(Instruction):
@@ -172,7 +177,7 @@ class Lt(Instruction):
     """
 
     def __init__(self, value_type) -> None:
-        if value_type not in supported_value_types:
+        if value_type not in supported_types:
             raise ValueError(f"Unsupported value type: {value_type}")
         self.value_type = value_type
         self.fn = num_fns[value_type]
@@ -180,9 +185,9 @@ class Lt(Instruction):
     def execute(self, state: VMState) -> None:
         a = Pop().execute(state)
         b = Pop().execute(state)
-        Push(self.fn(b)).execute(state)
-        Push(self.fn(a)).execute(state)
-        Push(self.fn(1 if a < b else 0)).execute(state)
+        Push(self.fn(b), self.value_type).execute(state)
+        Push(self.fn(a), self.value_type).execute(state)
+        Push(self.fn(1 if a < b else 0), self.value_type).execute(state)
 
 
 class Gt(Instruction):
@@ -194,7 +199,7 @@ class Gt(Instruction):
     """
 
     def __init__(self, value_type) -> None:
-        if value_type not in supported_value_types:
+        if value_type not in supported_types:
             raise ValueError(f"Unsupported value type: {value_type}")
         self.value_type = value_type
         self.fn = num_fns[value_type]
@@ -202,8 +207,8 @@ class Gt(Instruction):
     def execute(self, state: VMState) -> Any:
         a = Pop().execute(state)
         b = Pop().execute(state)
-        Push(self.fn(b)).execute(state)
-        Push(self.fn(a)).execute(state)
-        Push(self.fn(1 if a > b else 0)).execute(state)
+        Push(self.fn(b), self.value_type).execute(state)
+        Push(self.fn(a), self.value_type).execute(state)
+        Push(self.fn(1 if a > b else 0), self.value_type).execute(state)
 
 # Instructions -- end
