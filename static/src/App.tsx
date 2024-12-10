@@ -277,6 +277,9 @@ function App() {
                     handleChange={(e) => handleValueChange(e, index)}
                     handleRemove={handleRemove}
                   />
+                  <div className="rounded">
+                    <span>{instruction}</span>
+                  </div>
                 </li>
               ))}
             </ul>
