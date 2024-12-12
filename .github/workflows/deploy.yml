@@ -1,0 +1,37 @@
+name: Deploy
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Via https://github.com/zellwk/zellwk.com/blob/master/.github/workflows/deploy.yml
+      - name: Install SSH Key
+        uses: shimataro/ssh-key-action@v2
+        with:
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          known_hosts: "placeholder-per-zellwk-dot-com"
+      - name: Adding Known Hosts
+        run: ssh-keyscan -H ${{ secrets.DH_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Install Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: cd static && bun install
+
+      - name: Build project
+        run: bun run build
+
+      - name: Deploy
+        env:
+          USER: ${{ secrets.USER }}
+          HOST: ${{ secrets.HOST }}
+        run: rsync -vz -e "$(which ssh)" --bwlimit=2000 -av dist/ "$USER"@"$HOST":wasmvm.newschematic.org
