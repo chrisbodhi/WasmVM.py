@@ -60,7 +60,9 @@
 */
 
 .rounded {
-    max-width: 50px;
+    max-width: 350px;
+    display: flex;
+    align-items: center;
     /* Use transparent so the background image is visible */
     border: 10px solid transparent;
     padding: 20px;
@@ -79,6 +81,21 @@
     font-weight: 800;
     font-size: 1.2rem;
     text-transform: uppercase;
+    text-shadow:
+        rgba(0, 0, 0, 0.5) -1px 0,
+        rgba(0, 0, 0, 0.3) 0 -1px,
+        rgba(255, 255, 255, 0.5) 0 1px,
+        rgba(0, 0, 0, 0.3) -1px -2px;
+}
+
+.rounded button {
+    display: flex;
+    color: white;
+    background-color: transparent;
+}
+
+.rounded button:hover {
+    border: none;
     text-shadow:
         rgba(0, 0, 0, 0.5) -1px 0,
         rgba(0, 0, 0, 0.3) 0 -1px,

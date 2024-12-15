@@ -63,7 +63,11 @@ const InstructionButton = ({
   onClick,
 }: Pick<Instruction, "instruction" | "types"> & {
   acceptsValue: boolean;
-  onClick: (instruction: string, type: NumTypes, value?: number) => void;
+  onClick: (
+    instruction: (typeof commands)[number],
+    type: NumTypes,
+    value?: number,
+  ) => void;
 }) => {
   const [value, setValue] = useState("");
   const [type, setType] = useState(types[0]);
@@ -93,11 +97,15 @@ const InstructionButton = ({
         ))}
       </select>
       {acceptsValue ? (
-        <input
-          type="number"
-          onChange={(e) => setValue(e.target.value)}
-          value={value}
-        />
+        <>
+          <input
+            type="range"
+            onChange={(e) => setValue(e.target.value)}
+            value={value}
+            min={-100}
+          />
+          {value}
+        </>
       ) : null}
       <button>Move to stack</button>
     </form>
@@ -278,7 +286,11 @@ function App() {
                     handleRemove={handleRemove}
                   />
                   <div className="rounded">
-                    <span>{instruction}</span>
+                    <span>
+                      {instruction} | {type}
+                    </span>
+                    {value !== undefined ? <span>{value}</span> : null}
+                    <button onClick={() => handleRemove(index)}>×</button>
                   </div>
                 </li>
               ))}
