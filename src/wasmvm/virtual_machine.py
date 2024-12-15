@@ -1,7 +1,6 @@
 from typing import Callable
 
-from wasmvm.functions import i32
-from wasmvm.lib import Instruction, Push, VMState
+from wasmvm.lib import Instruction, VMState
 
 class StackVM:
     """
