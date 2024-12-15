@@ -1,8 +1,9 @@
 from abc import ABC, abstractmethod
-from typing import Any, Literal
+from typing import Any
 
-from wasmvm.shared import VMState, WasmValue, make_page
+from wasmvm.shared import Val_Type, VMState, Wasm_Value, make_page
 from wasmvm.functions import num_fns
+from typing import cast, Callable
 
 
 supported_types =  ["i32", "i64", "f32", "f64"]
@@ -20,13 +21,17 @@ class Push(Instruction):
     Push is an instruction that pushes a value onto the top of the stack.
     """
 
-    def __init__(self, value: WasmValue, value_type: Literal["i32", "i64", "f32", "f64"]):
+    def __init__(self, value: Wasm_Value, value_type: Val_Type):
         self.value = value
-        self.value_type = value_type
+        self.value_type: Val_Type = value_type
 
     def execute(self, state: VMState) -> None:
         type_fn = num_fns[self.value_type]
-        state.stack.append(type_fn(self.value))
+        if isinstance(self.value, int):
+            state.stack.append(type_fn(self.value))
+        elif isinstance(self.value, float):
+            float_fn = cast(Callable[[float], float], type_fn)
+            state.stack.append(float_fn(self.value))
 
 
 class Pop(Instruction):
@@ -35,7 +40,7 @@ class Pop(Instruction):
     from the stack and returns it.
     """
 
-    def execute(self, state: VMState) -> WasmValue:
+    def execute(self, state: VMState) -> Wasm_Value:
         return state.stack.pop()
 
 
@@ -61,10 +66,10 @@ class Add(Instruction):
     the stack.
     """
 
-    def __init__(self, value_type: Literal["i32", "i64", "f32", "f64"]) -> None:
+    def __init__(self, value_type: Val_Type) -> None:
         if value_type not in supported_types:
             raise ValueError(f"Unsupported value type: {value_type}")
-        self.value_type = value_type
+        self.value_type: Val_Type = value_type
         self.fn = num_fns[value_type]
 
     def execute(self, state: VMState) -> None:
@@ -72,6 +77,7 @@ class Add(Instruction):
         a = Pop().execute(state)
         # TODO: determine how to pass in the expected type here,
         # now that the API has changed.
+        # TODO: explore using cast, like in Push?
         Push(self.fn(a + b), self.value_type).execute(state)
 
 

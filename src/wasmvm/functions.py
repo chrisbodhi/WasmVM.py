@@ -1,5 +1,5 @@
 import struct
-from typing import Callable, Literal
+from typing import Callable, Dict, Literal, Union
 
 
 def i32(value: int) -> int:
@@ -31,7 +31,7 @@ def f64(value: float) -> float:
     return value
 
 
-num_fns: dict[Literal["i32", "i64", "f32", "f64"], Callable] = {
+num_fns: Dict[Literal["i32", "i64", "f32", "f64"], Union[Callable[[int], int], Callable[[float], float]]] = {
     "i32": i32,
     "i64": i64,
     "f32": f32,

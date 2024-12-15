@@ -10,7 +10,7 @@ from pydantic import BaseModel
 from wasmvm.virtual_machine import StackVM
 from wasmvm.functions import num_fns
 from wasmvm.lib import Add, Div, Eq, Eqz, Gt, Instruction, Lt, Mul, Pop, Push, Sub
-from wasmvm.shared import WasmValue
+from wasmvm.shared import Wasm_Value
 
 vms: dict[str, StackVM] = {}
 
@@ -45,7 +45,7 @@ cmds: dict[str, ABCMeta] = {
 class RPC(BaseModel):
     name: str
     type: Literal["i32", "i64", "f32", "f64"] | None = None
-    value: WasmValue | None = None
+    value: Wasm_Value | None = None
 
 
 class Dimensions(BaseModel):
