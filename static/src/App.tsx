@@ -18,15 +18,21 @@ type NumTypes = "i32" | "i64" | "f32" | "f64";
 
 const commands = [
   "add",
+  "and",
   "div",
+  "drop",
   "eq",
   "eqz",
+  "ge",
   "gt",
+  "le",
   "lt",
   "mul",
+  "or",
   "pop",
   "push",
   "sub",
+  "xor",
 ] as const;
 
 interface Instruction {
@@ -174,19 +180,25 @@ function App() {
     // Add the instructions to the VM from toSend
     const mapping: Record<(typeof commands)[number] | NumTypes, PyProxy> = {
       add: pyodide.pyimport("wasmvm.Add"),
+      and: pyodide.pyimport("wasmvm.AND"),
       div: pyodide.pyimport("wasmvm.Div"),
+      drop: pyodide.pyimport("wasmvm.Drop"),
       eq: pyodide.pyimport("wasmvm.Eq"),
       eqz: pyodide.pyimport("wasmvm.Eqz"),
       f32: pyodide.pyimport("wasmvm.f32"),
       f64: pyodide.pyimport("wasmvm.f64"),
+      ge: pyodide.pyimport("wasmvm.Ge"),
       gt: pyodide.pyimport("wasmvm.Gt"),
       i32: pyodide.pyimport("wasmvm.i32"),
       i64: pyodide.pyimport("wasmvm.i64"),
+      le: pyodide.pyimport("wasmvm.Le"),
       lt: pyodide.pyimport("wasmvm.Lt"),
       mul: pyodide.pyimport("wasmvm.Mul"),
+      or: pyodide.pyimport("wasmvm.OR"),
       pop: pyodide.pyimport("wasmvm.Pop"),
       push: pyodide.pyimport("wasmvm.Push"),
       sub: pyodide.pyimport("wasmvm.Sub"),
+      xor: pyodide.pyimport("wasmvm.XOR"),
     };
 
     const ins = toSend.map((s) => {

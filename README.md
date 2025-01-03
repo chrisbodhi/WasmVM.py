@@ -120,16 +120,20 @@ using Lynx).
 
 ### Instruction set
 
+- `AND`
 - `Add`
-- `Sub`
-- `Mul`
 - `Div`
+- `Drop`
 - `Eq`
 - `Eqz`
-- `Lt`
-- `Le` _coming soon_
+- `Ge`
 - `Gt`
-- `Ge` _coming soon_
+- `Le`
+- `Lt`
+- `Mul`
+- `OR`
+- `Sub`
+- `XOR`
 
 ### Building
 

@@ -1,7 +1,7 @@
 from .virtual_machine import StackVM
-from .lib import Add, Div, Eq, Eqz, Gt, Instruction, Lt, Mul, Pop, Push, Sub
+from .lib import Add, AND, Div, Drop, Eq, Eqz, Ge, Gt, Instruction, Le, Lt, Mul, OR, Pop, Push, Sub, XOR
 
 __all__ = [
     'StackVM',
-    'Add', 'Div', 'Eq', 'Eqz', 'Gt', 'Instruction', 'Lt', 'Mul', 'Pop', 'Push', 'Sub'
+    'Add', 'AND', 'Div', 'Drop', 'Eq', 'Eqz', 'Ge', 'Gt', 'Instruction', 'Le', 'Lt', 'Mul', 'OR', 'Pop', 'Push', 'Sub', 'XOR'
 ]

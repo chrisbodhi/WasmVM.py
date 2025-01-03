@@ -9,7 +9,7 @@ from pydantic import BaseModel
 
 from wasmvm.virtual_machine import StackVM
 from wasmvm.functions import num_fns
-from wasmvm.lib import Add, Div, Eq, Eqz, Gt, Instruction, Lt, Mul, Pop, Push, Sub
+from wasmvm.lib import Add, AND, Div, Drop, Eq, Eqz, Ge, Gt, Instruction, Le, Lt, Mul, OR, Pop, Push, Sub, XOR
 from wasmvm.shared import Wasm_Value
 
 vms: dict[str, StackVM] = {}
@@ -30,15 +30,21 @@ app.add_middleware(
 
 cmds: dict[str, ABCMeta] = {
     "add": Add,
+    "and": AND,
     "div": Div,
+    "drop": Drop,
     "eq": Eq,
     "eqz": Eqz,
+    "ge": Ge,
     "gt": Gt,
+    "le": Le,
     "lt": Lt,
     "mul": Mul,
+    "or": OR,
     "pop": Pop,
     "push": Push,
     "sub": Sub,
+    "xor": XOR,
 }
 
 

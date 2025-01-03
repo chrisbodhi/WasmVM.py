@@ -174,6 +174,28 @@ class Eqz(Instruction):
         Push(self.fn(1 if top == 0 else 0), self.value_type).execute(state)
 
 
+class Le(Instruction):
+    """
+    Le compares the top two values of the stack. If the top
+    value is less than or equal to the value immediately
+    following it, a 1 is pushed onto the stack. Otherwise,
+    a 0 is pushed onto the stack.
+    """
+
+    def __init__(self, value_type) -> None:
+        if value_type not in supported_types:
+            raise ValueError(f"Unsupported value type: {value_type}")
+        self.value_type = value_type
+        self.fn = num_fns[value_type]
+
+    def execute(self, state: VMState) -> None:
+        a = Pop().execute(state)
+        b = Pop().execute(state)
+        Push(self.fn(b), self.value_type).execute(state)
+        Push(self.fn(a), self.value_type).execute(state)
+        Push(self.fn(1 if a =< b else 0), self.value_type).execute(state)
+
+
 class Lt(Instruction):
     """
     Lt compares the top two values of the stack. If the top
@@ -196,6 +218,28 @@ class Lt(Instruction):
         Push(self.fn(1 if a < b else 0), self.value_type).execute(state)
 
 
+class Ge(Instruction):
+    """
+    Ge compares the top two values of the stack. If the top
+    value is greater than or equal to the value immediately
+    following it, a 1 is pushed onto the stack. Otherwise,
+    a 0 is pushed onto the stack.
+    """
+
+    def __init__(self, value_type) -> None:
+        if value_type not in supported_types:
+            raise ValueError(f"Unsupported value type: {value_type}")
+        self.value_type = value_type
+        self.fn = num_fns[value_type]
+
+    def execute(self, state: VMState) -> Any:
+        a = Pop().execute(state)
+        b = Pop().execute(state)
+        Push(self.fn(b), self.value_type).execute(state)
+        Push(self.fn(a), self.value_type).execute(state)
+        Push(self.fn(1 if a >= b else 0), self.value_type).execute(state)
+
+
 class Gt(Instruction):
     """
     Gt compares the top two values of the stack. If the top
@@ -216,5 +260,68 @@ class Gt(Instruction):
         Push(self.fn(b), self.value_type).execute(state)
         Push(self.fn(a), self.value_type).execute(state)
         Push(self.fn(1 if a > b else 0), self.value_type).execute(state)
+
+
+class Drop(Instruction):
+    """
+    Drop removes the top value from the stack.
+    """
+
+    def execute(self, state: VMState) -> None:
+        Pop().execute(state)
+
+
+class AND(Instruction):
+    """
+    AND performs a bitwise AND operation on the top two values,
+    then pushes the result back onto the stack.
+    """
+
+    def __init__(self, value_type) -> None:
+        if value_type not in supported_types:
+            raise ValueError(f"Unsupported value type: {value_type}")
+        self.value_type = value_type
+        self.fn = num_fns[value_type]
+
+    def execute(self, state: VMState) -> None:
+        a = Pop().execute(state)
+        b = Pop().execute(state)
+        Push(self.fn(a & b), self.value_type).execute(state)
+
+
+class OR(Instruction):
+    """
+    OR performs a bitwise OR operation on the top two values,
+    then pushes the result back onto the stack.
+    """
+
+    def __init__(self, value_type) -> None:
+        if value_type not in supported_types:
+            raise ValueError(f"Unsupported value type: {value_type}")
+        self.value_type = value_type
+        self.fn = num_fns[value_type]
+
+    def execute(self, state: VMState) -> None:
+        a = Pop().execute(state)
+        b = Pop().execute(state)
+        Push(self.fn(a | b), self.value_type).execute(state)
+
+
+class XOR(Instruction):
+    """
+    XOR performs a bitwise XOR operation on the top two values,
+    then pushes the result back onto the stack.
+    """
+
+    def __init__(self, value_type) -> None:
+        if value_type not in supported_types:
+            raise ValueError(f"Unsupported value type: {value_type}")
+        self.value_type = value_type
+        self.fn = num_fns[value_type]
+
+    def execute(self, state: VMState) -> None:
+        a = Pop().execute(state)
+        b = Pop().execute(state)
+        Push(self.fn(a ^ b), self.value_type).execute(state)
 
 # Instructions -- end

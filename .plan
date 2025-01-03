@@ -41,9 +41,13 @@ IN ORDER TO LEARN MORE COMPLETELY WHAT WASM DOES AND HOW.
 - read from host system memory
 - write to host system memory
 - add observers for in-vm memory
-- `Le` instruction
-- `Ge` instruction
 
+- ✅ drop instruction
+- ✅ AND instruction
+- ✅ OR instruction
+- ✅ XOR instruction
+- ✅ `Le` instruction
+- ✅ `Ge` instruction
 - ✅ multiply instruction
 - ✅ division instruction
 - ✅ eq instruction
