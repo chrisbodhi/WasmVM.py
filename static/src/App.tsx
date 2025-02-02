@@ -1,7 +1,6 @@
 import { useState } from "react";
 
 import "./App.css";
-import { Box } from "./Box";
 
 // eslint-disable-next-line
 type PyProxy = any;
@@ -41,8 +40,9 @@ interface Instruction {
   acceptsValue: boolean;
 }
 
-const WHEEL_URL =
-  "https://files.pythonhosted.org/packages/91/b2/d798c9f63876e2551b62afdd5cb39b9ddfe15b16ab29c3b3503a206e628e/WasmVM-0.1.0-py3-none-any.whl";
+// const WHEEL_URL =
+// "https://files.pythonhosted.org/packages/91/b2/d798c9f63876e2551b62afdd5cb39b9ddfe15b16ab29c3b3503a206e628e/WasmVM-0.1.0-py3-none-any.whl";
+const WHEEL_URL = "http://localhost:8080/dist/WasmVM-0.1.0-py3-none-any.whl";
 
 // @ts-expect-error -- untyped until we install from package.json
 let pyodide;
@@ -173,57 +173,52 @@ function App() {
 
   const sendInstructions = async () => {
     if (!vm) {
-      console.error("No VM; get one");
+      alert("No VM; get one");
       return;
     }
 
-    // Add the instructions to the VM from toSend
+    console.log("About to start.", toSend);
+
     const mapping: Record<(typeof commands)[number] | NumTypes, PyProxy> = {
       add: pyodide.pyimport("wasmvm.Add"),
-      and: pyodide.pyimport("wasmvm.AND"),
-      div: pyodide.pyimport("wasmvm.Div"),
-      drop: pyodide.pyimport("wasmvm.Drop"),
-      eq: pyodide.pyimport("wasmvm.Eq"),
-      eqz: pyodide.pyimport("wasmvm.Eqz"),
-      f32: pyodide.pyimport("wasmvm.f32"),
-      f64: pyodide.pyimport("wasmvm.f64"),
-      ge: pyodide.pyimport("wasmvm.Ge"),
-      gt: pyodide.pyimport("wasmvm.Gt"),
-      i32: pyodide.pyimport("wasmvm.i32"),
-      i64: pyodide.pyimport("wasmvm.i64"),
-      le: pyodide.pyimport("wasmvm.Le"),
-      lt: pyodide.pyimport("wasmvm.Lt"),
-      mul: pyodide.pyimport("wasmvm.Mul"),
-      or: pyodide.pyimport("wasmvm.OR"),
-      pop: pyodide.pyimport("wasmvm.Pop"),
+      // and: pyodide.pyimport("wasmvm.AND"),
+      // div: pyodide.pyimport("wasmvm.Div"),
+      // drop: pyodide.pyimport("wasmvm.Drop"),
+      // eq: pyodide.pyimport("wasmvm.Eq"),
+      // eqz: pyodide.pyimport("wasmvm.Eqz"),
+      // f32: pyodide.pyimport("wasmvm.f32"),
+      // f64: pyodide.pyimport("wasmvm.f64"),
+      // ge: pyodide.pyimport("wasmvm.Ge"),
+      // gt: pyodide.pyimport("wasmvm.Gt"),
+      // i32: pyodide.pyimport("wasmvm.i32"),
+      // i64: pyodide.pyimport("wasmvm.i64"),
+      // le: pyodide.pyimport("wasmvm.Le"),
+      // lt: pyodide.pyimport("wasmvm.Lt"),
+      // mul: pyodide.pyimport("wasmvm.Mul"),
+      // or: pyodide.pyimport("wasmvm.OR"),
+      // pop: pyodide.pyimport("wasmvm.Pop"),
       push: pyodide.pyimport("wasmvm.Push"),
-      sub: pyodide.pyimport("wasmvm.Sub"),
-      xor: pyodide.pyimport("wasmvm.XOR"),
+      // sub: pyodide.pyimport("wasmvm.Sub"),
+      // xor: pyodide.pyimport("wasmvm.XOR"),
     };
+
+    console.log("mapping", toSend);
 
     const ins = toSend.map((s) => {
       const instruction = mapping[s.instruction];
       return s.value !== undefined
-        ? instruction(mapping[s.type](s.value))
-        : instruction(mapping[s.type]);
+        ? instruction(s.value, "i32")
+        : instruction("i32");
     });
 
+    console.log("sending", ins);
+
+    // @ts-expect-error -- pyodide is untyped
     vm.instructions = pyodide.toPy(ins);
     vm.run();
 
     setToSend([]);
     setStack(vm.inspect());
-
-    // const jsonSend = await resSend.json();
-    // console.log("stack after send", jsonSend);
-    // setToSend([]);
-
-    // const resRun = await fetch(`http://localhost:8000/run/${vmId}`, {
-    //   method: "POST",
-    // });
-    // const jsonRun = await resRun.json();
-    // console.log("stack after run", jsonRun);
-    // setStack(jsonRun);
   };
 
   return (
@@ -287,20 +282,10 @@ function App() {
           <div className="card">
             <h2>Instructions to send</h2>
             <ul style={{ display: "flex", flexDirection: "column-reverse" }}>
-              {toSend.map(({ instruction, type, value }, index) => (
+              {toSend.map(({ instruction, value }, index) => (
                 <li key={index + instruction}>
-                  <Box
-                    instruction={instruction}
-                    type={type}
-                    value={value}
-                    index={index}
-                    handleChange={(e) => handleValueChange(e, index)}
-                    handleRemove={handleRemove}
-                  />
                   <div className="rounded">
-                    <span>
-                      {instruction} | {type}
-                    </span>
+                    <span>{instruction}</span>
                     {value !== undefined ? <span>{value}</span> : null}
                     <button onClick={() => handleRemove(index)}>×</button>
                   </div>

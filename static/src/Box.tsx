@@ -9,7 +9,6 @@ export const Box = ({
   handleRemove,
 }: {
   instruction: string;
-  type: "i32" | "i64" | "f32" | "f64";
   value: number | undefined;
   index: number;
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -21,7 +20,6 @@ export const Box = ({
     <span className="wrapper">
       <span className="instruction">{instruction}</span>
       <span className={`${type}Box`}>
-        <span className={`${type}Type`}>{type}</span>
         {value !== undefined && isEditing ? (
           <input
             value={value}
