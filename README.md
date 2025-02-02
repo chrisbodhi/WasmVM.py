@@ -137,6 +137,8 @@ using Lynx).
 
 ### Building
 
+From the top-level of the project:
+
 ```sh
 source venv/bin/activate
 python -m pip install -r requirements.txt
@@ -144,6 +146,8 @@ python -m pip install -r requirements.txt
 python -m pip install -e .
 # Build wheel
 python -m build
+# Serve the wheel locally for development
+python serve_with_cors.py
 # Upload wheel to testpypi -- expects a ~/.pypirc file with credentials
 python -m twine upload --verbose --repository testpypi dist/*
 # Upload wheel to pypi -- expects a ~/.pypirc file with credentials
