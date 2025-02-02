@@ -2,6 +2,7 @@ from typing import Literal
 
 
 Val_Type = Literal["i32", "i64", "f32", "f64"]
+Val_Int_Type = Literal["i32", "i64"]
 Wasm_Value = int | float
 
 

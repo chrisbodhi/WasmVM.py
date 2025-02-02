@@ -2,6 +2,7 @@ THE GOAL HERE IS TO CREATE A SIMPLE WASM-LIKE MACHINE IN PYTHON
 IN ORDER TO LEARN MORE COMPLETELY WHAT WASM DOES AND HOW.
 
 - 🏃‍♂️ zomg, unit tests, please. push(6), push(-6), sub() --> 12
+- ✅ Solve type issues in lib.py; extend what I started with Add, if that approach is sound.
 - 🚢 port API functionality to wasm-exposed commands
     - ✅ create vm
     - ✅ get instructions
