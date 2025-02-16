@@ -40,6 +40,7 @@ how WebAssembly works. Right now, like WebAssembly, it only supports 32- and
 #### Running the API
 
 _Deprecation warning_: The API is being deprecated in favor of loading the VM in the browser, by way of [Pyodide](https://pyodide.org).
+In order to load up your changes locally, run `python serve_with_cors.py` and start the frontend with `bun run dev`.
 
 1. Create a Python virtual environment, e.g. `python3 -m venv venv`.
 1. Activate the virtual environment, e.g. `source .venv/bin/activate`.
@@ -53,7 +54,9 @@ _Deprecation warning_: The API is being deprecated in favor of loading the VM in
 In the directory `/static`, there resides a simple frontend that can be used to interact with the API. To start the frontend, you need to first install the necessary tools:
 
 ```bash
-# install bun for macos
+# Use nix...
+nix develop -f flake.nix
+# or, install bun for macos
 brew install oven-sh/bun/bun
 bun upgrade
 ```
