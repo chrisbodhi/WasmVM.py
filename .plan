@@ -42,6 +42,7 @@ IN ORDER TO LEARN MORE COMPLETELY WHAT WASM DOES AND HOW.
 - read from host system memory
 - write to host system memory
 - add observers for in-vm memory
+- nix: Have the shell use the current shell, not Bash
 
 - ✅ drop instruction
 - ✅ AND instruction
