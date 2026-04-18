@@ -1,5 +1,24 @@
-THE GOAL HERE IS TO CREATE A SIMPLE WASM-LIKE MACHINE IN PYTHON
-IN ORDER TO LEARN MORE COMPLETELY WHAT WASM DOES AND HOW.
+THE GOAL HERE IS TO CREATE A SIMPLE WASM-LIKE MACHINE IN ORDER TO
+LEARN MORE COMPLETELY WHAT WASM DOES AND HOW.
+
+Rewriting in Rust, compiled to WebAssembly for the browser. Phased,
+educational iterations:
+
+- Phase 1 ✅ i32 stack machine: Push, Pop, Drop, Add, Sub, Mul, Div
+    - ✅ crates/wasmvm-core scaffolded with wasm-bindgen
+    - ✅ wasm-pack build wired to static/src/wasmvm-pkg
+    - ✅ frontend loads native wasm module (no Pyodide)
+- Phase 2: more instructions and all four types (i32, i64, f32, f64)
+    - comparisons (Eq, Eqz, Lt, Le, Gt, Ge), bitwise (AND, OR, XOR)
+    - per-instruction type selection in the UI
+- Phase 3: linear memory
+    - pages, Grow, load/store at offset
+    - visual representation of memory in the UI
+
+Legacy Python notes from the previous iteration are preserved below.
+
+---
+
 
 - 🏃‍♂️ zomg, unit tests, please. push(6), push(-6), sub() --> 12
 - ✅ Solve type issues in lib.py; extend what I started with Add, if that approach is sound.
