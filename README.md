@@ -1,10 +1,48 @@
-# WasmVM.py
+# WasmVM
 ## A stack-based virtual machine for learning about WebAssembly
 
 This is a simple stack-based virtual machine that can execute a small set of
 instructions. It is intended to be the starting point for learning more deeply
-how WebAssembly works. Right now, like WebAssembly, it only supports 32- and
-64-bit integers and floats for operations.
+how WebAssembly works.
+
+The project is being rewritten in Rust and compiled to WebAssembly itself, so
+the engine runs natively in the browser. The rewrite proceeds in phases so
+readers can follow along with increasingly capable iterations:
+
+1. **Phase 1 (current)** — `i32` stack machine with `Push`, `Pop`, `Drop`,
+   `Add`, `Sub`, `Mul`, `Div`.
+2. **Phase 2** — remaining instructions (comparisons, bitwise) across all four
+   numeric types (`i32`, `i64`, `f32`, `f64`).
+3. **Phase 3** — linear memory: pages, `Grow`, load/store.
+
+### Running the browser app
+
+Build the Rust core to Wasm, then start the frontend:
+
+```sh
+# From the repo root — requires rustup + wasm-pack on PATH
+(cd crates/wasmvm-core && wasm-pack build --target web \
+    --out-dir ../../static/src/wasmvm-pkg --out-name wasmvm_core)
+
+cd static
+bun install
+bun run dev
+```
+
+The frontend imports the generated wasm module directly; no Python or API
+server is required.
+
+### Running the Rust tests
+
+```sh
+cargo test -p wasmvm-core
+```
+
+---
+
+The legacy Python implementation remains in `src/` and `main.py` for reference
+while the Rust port lands. Everything below describes that older
+implementation.
 
 ### Using
 

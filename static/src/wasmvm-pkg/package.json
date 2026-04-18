@@ -1,0 +1,17 @@
+{
+  "name": "wasmvm-core",
+  "type": "module",
+  "description": "Educational stack-based VM modeled on WebAssembly, compiled to Wasm for the browser.",
+  "version": "0.1.0",
+  "license": "MIT",
+  "files": [
+    "wasmvm_core_bg.wasm",
+    "wasmvm_core.js",
+    "wasmvm_core.d.ts"
+  ],
+  "main": "wasmvm_core.js",
+  "types": "wasmvm_core.d.ts",
+  "sideEffects": [
+    "./snippets/*"
+  ]
+}
